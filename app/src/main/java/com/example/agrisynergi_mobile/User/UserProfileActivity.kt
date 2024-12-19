@@ -52,6 +52,9 @@ class UserProfileActivity : ComponentActivity() {
                         "Edit Profile" -> {
                             startActivity(Intent(this, EditProfileActivity::class.java))
                         }
+                        "Toko Saya" -> {
+                            startActivity(Intent(this, TokoActivity::class.java))
+                        }
                         "Riwayat Pesanan" -> {
                             startActivity(Intent(this, OrderHistoryActivity::class.java))
                         }
@@ -184,6 +187,7 @@ fun OptionsList(onOptionSelected: (String) -> Unit) {
     val context = LocalContext.current
     val options = listOf(
         "Edit Profile",
+        "Toko Saya",
         "Riwayat Pesanan",
         "Postingan Saya",
         "Katalog Dropshipper",
@@ -215,6 +219,7 @@ fun OptionsList(onOptionSelected: (String) -> Unit) {
             OptionItem(option = option) {
                 when (option) {
                     "Edit Profile" -> context.startActivity(Intent(context, EditProfileActivity::class.java))
+                    "Toko Saya" -> context.startActivity(Intent(context, TokoActivity::class.java))
                     "Riwayat Pesanan" -> context.startActivity(Intent(context, OrderHistoryActivity::class.java))
                     "Postingan Saya" -> context.startActivity(Intent(context, PostingActivity::class.java))
                     "Katalog Dropshipper" -> context.startActivity(Intent(context, DropshipperCatalogActivity::class.java))
@@ -226,7 +231,7 @@ fun OptionsList(onOptionSelected: (String) -> Unit) {
                     "Favorite2 Saya" -> context.startActivity(Intent(context, MyFavorite2Activity::class.java))
                     "Masukkan Diskon" -> context.startActivity(Intent(context, AddDiscountCodeActivity::class.java))
                     "Done Checkout" -> context.startActivity(Intent(context, DoneCheckoutActivity::class.java))
-                    "Checkout" -> context.startActivity(Intent(context, CheckoutActivity::class.java))
+//                    "Checkout" -> context.startActivity(Intent(context, CheckoutActivity::class.java))
 
                 }
             }
