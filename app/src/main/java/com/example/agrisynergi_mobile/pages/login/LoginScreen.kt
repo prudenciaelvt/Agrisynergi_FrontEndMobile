@@ -66,7 +66,9 @@ fun LoginScreen(navController: NavController) {
 
     Box(modifier = Modifier.background(Color.White)){
         Column (modifier = Modifier.fillMaxSize().padding(24.dp), verticalArrangement = Arrangement.Center){
-            Text("Welcome bro, here you must login before start your activity", fontSize = 20.sp, fontWeight = FontWeight.Black, textAlign = TextAlign.Center)
+            Text("Welcome to AgriSynergy!", fontSize = 20.sp, fontWeight = FontWeight.Black, textAlign = TextAlign.Center)
+            Text("Please login to start.", fontSize = 20.sp, textAlign = TextAlign.Center)
+            Text("email:admin, password:123", fontSize = 10.sp, textAlign = TextAlign.Center)
             Spacer(Modifier.height(20.dp))
             val image = painterResource(R.drawable.agri_synergy_3)
             Image(

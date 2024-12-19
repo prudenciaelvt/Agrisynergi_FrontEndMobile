@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,6 +31,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,76 +53,103 @@ import com.example.agrisynergi_mobile.data.datamarket
 
 //@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CheckoutScreen(marketId:Int, navController: NavController){
-    Scaffold (
-        topBar = {
-            Row (
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth().height(55.dp).
-                background(colorResource(R.color.hijau_tua)),
-                verticalAlignment = Alignment.CenterVertically
-            ){
-                IconButton(
-                    onClick = {
-                        navController.navigateUp()
-                    }
-                ) {
-                    Icon(
-                        painterResource(R.drawable.ic_leftleft),
-                        contentDescription = null,
-                        tint = colorResource(R.color.white)
-                    )
-                }
+fun CheckoutScreen(marketId: Int, navController: NavController) {
+    var isOrderComplete by remember { mutableStateOf(false) }
 
-                Text(text = "CHECKOUT",
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center,
-                    fontSize = 20.sp,
-                    color = colorResource(R.color.white))
-
-                IconButton(
-                    onClick = {
-
-                    }
-                ) {
-                    Icon(
-                        painterResource(R.drawable.ic_shopping_bag_r),
-                        contentDescription = null,
-                        tint = colorResource(R.color.white)
-                    )
-                }
-
-            }
-        },
-        bottomBar = {
-            Column(modifier = Modifier
-                .padding(WindowInsets.navigationBars.asPaddingValues())
-                .background(colorResource(R.color.white))
-                .fillMaxWidth().shadow(elevation = 0.1.dp),
-                verticalArrangement = Arrangement.Center) {
-                Box(modifier = Modifier
-                    .fillMaxWidth()
-                    .height(1.dp))
-                Row(horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically,
+    if (!isOrderComplete) {
+        Scaffold(
+            topBar = {
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(12.dp)
+                        .height(55.dp)
+                        .background(colorResource(R.color.hijau_tua)),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-//                    val totalHarga = 50000f
-//                    Text(text = "Rp ${String.format("%,.0f", totalHarga)}", modifier = Modifier.padding(12.dp), fontWeight = FontWeight.Bold)
-                    Button(onClick = {}, shape = RoundedCornerShape(
-                        corner = CornerSize(10.dp)),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = colorResource(R.color.hijau_pudar)), modifier = Modifier.fillMaxWidth().height(50.dp)
+                    IconButton(
+                        onClick = {
+                            navController.navigateUp()
+                        }
                     ) {
-                        Text("Buat Pesananan")
+                        Icon(
+                            painterResource(R.drawable.ic_leftleft),
+                            contentDescription = null,
+                            tint = colorResource(R.color.white)
+                        )
+                    }
+
+                    Text(
+                        text = "CHECKOUT",
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center,
+                        fontSize = 20.sp,
+                        color = colorResource(R.color.white)
+                    )
+
+                    IconButton(
+                        onClick = {
+                        }
+                    ) {
+                        Icon(
+                            painterResource(R.drawable.ic_shopping_bag_r),
+                            contentDescription = null,
+                            tint = colorResource(R.color.white)
+                        )
+                    }
+                }
+            },
+            bottomBar = {
+                Column(
+                    modifier = Modifier
+                        .padding(WindowInsets.navigationBars.asPaddingValues())
+                        .background(colorResource(R.color.white))
+                        .fillMaxWidth()
+                        .shadow(elevation = 0.1.dp),
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(1.dp)
+                    )
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(12.dp)
+                    ) {
+                        Button(
+                            onClick = { isOrderComplete = true },
+                            shape = RoundedCornerShape(corner = CornerSize(10.dp)),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = colorResource(R.color.hijau_pudar)
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(50.dp)
+                        ) {
+                            Text("Buat Pesananan")
+                        }
                     }
                 }
             }
+        ) { paddingValues ->
+            CheckoutItemsScreen(marketId, Modifier.padding(paddingValues))
         }
-    ){
-            paddingValues ->  CheckoutItemsScreen(marketId,Modifier.padding(paddingValues))
+    } else {
+        Scaffold(
+            topBar = {
+                DoneCheckoutHeader(onBackPressed = {
+                    navController.navigateUp()
+                })
+            }
+        ) { paddingValues ->
+            Box(modifier = Modifier.padding(paddingValues)) {
+                DoneCheckoutContent()
+            }
+        }
     }
 }
 
@@ -186,35 +218,35 @@ Perumahan Setu Indah, Jalan Kenangan Setu Indah, No.14c RT 001/02, Bogor, Jakart
             }
         }
         Spacer(Modifier.height(6.dp))
-        Box {
-            Column(modifier = Modifier.fillMaxWidth().border(color = Color.Green, width = 1.dp, shape = RoundedCornerShape(corner = CornerSize(8.dp)))
-                .clip(RoundedCornerShape(8.dp)) // Sudut bulat dengan radius 16dp
-                .background(colorResource(R.color.white))
-                .padding(10.dp)) {
-                Row (horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()){
-                    Box(){
-                        Row {
-                            Image(
-                                painter = painterResource(R.drawable.ic_gift_r),
-                                contentDescription = null
-                            )
-                            Spacer(Modifier.width(12.dp))
-                            Text(text = "Add discount code", fontSize = 16.sp, softWrap = true)
-                        }
-                    }
-                    IconButton(onClick = {}) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_leftleft),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(20.dp)
-                                .graphicsLayer(rotationZ = 268f), // Rotasi ikon 45 derajat // Atur warna ikon jika perlu
-                        )
-                    }
+//        Box {
+//            Column(modifier = Modifier.fillMaxWidth().border(color = Color.Green, width = 1.dp, shape = RoundedCornerShape(corner = CornerSize(8.dp)))
+//                .clip(RoundedCornerShape(8.dp)) // Sudut bulat dengan radius 16dp
+//                .background(colorResource(R.color.white))
+//                .padding(10.dp)) {
+//                Row (horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()){
+//                    Box(){
+//                        Row {
+//                            Image(
+//                                painter = painterResource(R.drawable.ic_gift_r),
+//                                contentDescription = null
+//                            )
+//                            Spacer(Modifier.width(12.dp))
+//                            Text(text = "Add discount code", fontSize = 16.sp, softWrap = true)
+//                        }
+//                    }
+//                    IconButton(onClick = {}) {
+//                        Icon(
+//                            painter = painterResource(R.drawable.ic_leftleft),
+//                            contentDescription = null,
+//                            modifier = Modifier
+//                                .size(20.dp)
+//                                .graphicsLayer(rotationZ = 268f), // Rotasi ikon 45 derajat // Atur warna ikon jika perlu
+//                        )
+//                    }
+//
+//                }
+//            }
 
-                }
-            }
-        }
         Spacer(Modifier.height(6.dp))
         Box(modifier = Modifier// Ukuran Box
             .clip(RoundedCornerShape(8.dp)) // Sudut bulat dengan radius 16dp
@@ -286,3 +318,77 @@ Perumahan Setu Indah, Jalan Kenangan Setu Indah, No.14c RT 001/02, Bogor, Jakart
 
 }
 
+@Composable
+fun DoneCheckoutHeader(onBackPressed: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color(0xFF13382C))
+            .padding(horizontal = 16.dp, vertical = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.ic_back),
+            contentDescription = "Back Arrow",
+            tint = Color.White,
+            modifier = Modifier
+                .size(24.dp)
+                .clickable { onBackPressed() }
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+        Text(
+            text = "Check Out",
+            color = Color.White,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Medium
+        )
+    }
+}
+
+@Composable
+fun DoneCheckoutContent() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.order_complete),
+                contentDescription = "Order Complete Image",
+                modifier = Modifier.size(200.dp)
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = "Berhasil membuat pesanan!",
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black
+            )
+
+            Text(
+                text = "Silakan tunggu barang diantarkan ke tempat anda.",
+                fontSize = 14.sp,
+                color = Color.Gray
+            )
+
+            Spacer(modifier = Modifier.height(30.dp))
+
+            Button(
+                onClick = {  },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF5F897B)),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .height(48.dp)
+            ) {
+                Text("Kembali", color = Color.White)
+            }
+        }
+    }
+}

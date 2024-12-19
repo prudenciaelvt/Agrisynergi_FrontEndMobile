@@ -198,9 +198,9 @@ fun OptionsList(onOptionSelected: (String) -> Unit) {
         "Log Out",
         "Katalog Dropshipper2",
         "Favorite2 Saya",
-        "Masukkan Diskon",
-        "Done Checkout",
-        "Checkout",
+//        "Masukkan Diskon",
+//        "Done Checkout",
+//        "Checkout",
     )
 
     Column(
@@ -229,8 +229,8 @@ fun OptionsList(onOptionSelected: (String) -> Unit) {
                     "Tentang Kami" -> context.startActivity(Intent(context, AboutUsActivity::class.java))
                     "Katalog Dropshipper2" -> context.startActivity(Intent(context, DropshipperCatalog2Activity::class.java))
                     "Favorite2 Saya" -> context.startActivity(Intent(context, MyFavorite2Activity::class.java))
-                    "Masukkan Diskon" -> context.startActivity(Intent(context, AddDiscountCodeActivity::class.java))
-                    "Done Checkout" -> context.startActivity(Intent(context, DoneCheckoutActivity::class.java))
+//                    "Masukkan Diskon" -> context.startActivity(Intent(context, AddDiscountCodeActivity::class.java))
+//                    "Done Checkout" -> context.startActivity(Intent(context, DoneCheckoutActivity::class.java))
 //                    "Checkout" -> context.startActivity(Intent(context, CheckoutActivity::class.java))
 
                 }
